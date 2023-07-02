@@ -157,13 +157,10 @@ def instalar_programas(programas_selecionados):
 def openvpn_install():
   titulo_progress.configure(text = 'Instalando OpenVPN..')
   textbox.insert("0.0","Instalando OpenVPN...\n")
-  openvpn_installer = file_ids.append('01JI7CLSXBVMLDGNNS3VBJME4R2S5DY6PI')
+  file_ids.append('01JI7CLSXBVMLDGNNS3VBJME4R2S5DY6PI')
   baixarprogs(file_ids)
-  caminhoopenvpn = os.getcwd()
-  print(caminhoopenvpn)
-  testee = subprocess.run(['openvpn-install-2.4.7-I607-Win10.exe', '/S'], shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+  openpvn_setup = subprocess.run(['openvpn-install-2.4.7-I607-Win10.exe', '/S'], shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
   textbox.insert("0.0", "Openvpn instalado com sucesso")
-
 
 #func e info para caso nenhum programa seja selecionado
 def erronenhumprograma():
