@@ -4,7 +4,6 @@ import customtkinter
 #from PIL import Image
 from testonedrivedown import baixarprogs, file_ids
 from ms_graph import generate_access_token, GRAPH_API_ENDPOINT
-import os
 import concurrent.futures
 import time
 
@@ -41,7 +40,7 @@ framebotao.grid(padx=10,pady=10)
 #app_image_bt = customtkinter.CTkLabel(text="Instalador de \n Programas EPF",font=("Arial",18,"bold"),master=win,compound=LEFT)
 #app_image_bt.grid(row=0,column=0, padx=30, sticky=W)
 
-#func para dark/light mode
+# Func para dark/light mode
 switch_var = customtkinter.StringVar(value="Dark")
 
 def switch_event():
@@ -53,20 +52,20 @@ switch_1 = customtkinter.CTkSwitch(master=win, text="Modo Dark/Light", command=s
                                    variable=switch_var, onvalue="Light", offvalue="Dark")
 switch_1.grid(column=0, row=0, padx=30, pady=10, sticky=E)
 
-#programas essenciais
+# Programas essenciais
 titulo_programas_essenciais = customtkinter.CTkLabel(frameessenciais, text="Programas Essenciais")
 titulo_programas_essenciais.grid(row=0, column=0, padx=5, pady=5)
 
-#programas especificos
+# Programas especificos
 titulo_programas_especificos = customtkinter.CTkLabel(frameespecificos, text="Programas Específicos")
 titulo_programas_especificos.grid(row=1, column=0, padx=5, pady=5)
 
-#arrays com os programas
+# Arrays com os programas
 programas = ['Adobe Reader', 'Winrar','Java','Google Chrome','Google Earth','Office 365','Bitdefender','Openvpn','Teamviewer']
 progs = [str(i) for i in range(len(programas))]
 programas_selecionados=[]
 
-#func para verificar os programas selecionados no checkbox
+# Func para verificar os programas selecionados no checkbox
 def seestaselecionado(programa, var):
   if var.get() == "off":
     try:
@@ -76,7 +75,7 @@ def seestaselecionado(programa, var):
   else:
       programas_selecionados.append(programa)
 
-# criando as checkbox      
+# Criando as checkbox      
 for x in range(0,5):
     progs[x] = customtkinter.StringVar(value="off")
     l = customtkinter.CTkCheckBox(frameessenciais, text=programas[x], variable=progs[x],onvalue="on", offvalue="off",command=lambda x=programas[x],y=progs[x]:seestaselecionado(x,y))
@@ -97,7 +96,7 @@ progressbar.set(0)
 textbox = customtkinter.CTkTextbox(framebotao, width=600, padx=10, pady=10)
 textbox.grid(row=14,column=1)
 
-#func para instalar todos os programas
+# Func para instalar todos os programas
 def instalartudo(codwinget):
   #print(codwinget)
   # increment = 10 / len(programas_selecionados) / 10
@@ -115,7 +114,7 @@ def instalartudo(codwinget):
 
 instalar = []
 
-#func para inserir os programas selecionados no array
+# Func para inserir os programas selecionados no array
 def instalar_programas(programas_selecionados):
  instalar.clear()
  if not programas_selecionados:
@@ -142,7 +141,7 @@ def instalar_programas(programas_selecionados):
       titulo_progress.configure('Nenhum programa válido selecionado')
       textbox.insert("0.0","Nenhum programa válido selecionado.\n")
 
- #instalar os programas com MultiThreading       
+ # Instalar os programas com MultiThreading       
  print("Running threaded:")
  threaded_start = time.time()
  with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -154,15 +153,37 @@ def instalar_programas(programas_selecionados):
         textbox.insert("0.0", future.result())
  print("Threaded time:", time.time() - threaded_start)
 
+# Func para programas especificos - openvpn - baixar e instalar silently
 def openvpn_install():
-  titulo_progress.configure(text = 'Instalando OpenVPN..')
-  textbox.insert("0.0","Instalando OpenVPN...\n")
   file_ids.append('01JI7CLSXBVMLDGNNS3VBJME4R2S5DY6PI')
   baixarprogs(file_ids)
   openpvn_setup = subprocess.run(['openvpn-install-2.4.7-I607-Win10.exe', '/S'], shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
-  textbox.insert("0.0", "Openvpn instalado com sucesso")
+  print(openpvn_setup)
 
-#func e info para caso nenhum programa seja selecionado
+# Func para programas especificos - teamviewer - baixar somente - instalar manualmente
+def teamviewer_install():
+ print('Baixando Teamviewer 11 Host')
+ file_ids.append('01JI7CLSSL4HCKYSIYEBHIA5OTZHT3EXOZ')
+ baixarprogs(file_ids)
+ print('Teamviewer 11 Host instalado com sucesso')
+
+# Func para programas especificos - office 365 - baixar somente - instalar manualmente
+def office_install():
+  print ('Baixando Office 365')
+  file_ids.append('01JI7CLSV43KDWB26UT5A32UIJER63GHQG')
+  baixarprogs(file_ids)
+  print('Office 365 baixado com sucesso')
+
+# Func para programas especificos - bitdefender - baixar somente - instalar manualmente
+def bitdefender_install():
+  print ('Baixando Bitdefender')
+  file_ids.append('01JI7CLSVCHNKE4EJRLFBIP74WWWNQGBVF')
+  file_ids.append('01JI7CLSVUT2PEFRFK3NG2XYQ457VVNJ3X')
+  baixarprogs(file_ids)
+  print('Bitdefender baixado com sucesso')
+
+
+# Func e info para caso nenhum programa seja selecionado
 def erronenhumprograma():
   global pop
 
